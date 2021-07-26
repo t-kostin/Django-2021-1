@@ -1,16 +1,14 @@
 from django.shortcuts import render
+from json import loads
 
 # Create your views here.
 
 def index(request):
-    title = 'товары'
-    menu_links = [
-        {'href': 'index', 'name': 'все'},
-        {'href': 'products_home', 'name': 'дом'},
-        {'href': 'products_office', 'name': 'офис'},
-        {'href': 'products_modern', 'name': 'модерн'},
-        {'href': 'products_classic', 'name': 'классика'},
-    ]
+
+    title = 'продукты'
+    with open('mainapp/menu_links.json', 'r', encoding='utf-8') as source:
+        menu_links = loads(source.read())
+
     context = {
         'title': title,
         'menu_links': menu_links,
