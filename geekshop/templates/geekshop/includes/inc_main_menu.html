@@ -1,0 +1,35 @@
+<div class="header clearfix">
+    <a href="/" class="logo"></a>
+    <ul class="menu">
+        <li><a href="{% url 'index' %}" class="{% if title == 'главная' %}active{% endif %}">домой</a></li>
+        <li><a href="{% url 'products:index' %}" class="{% if title == 'продукты' %}active{% endif %}">продукты</a></li>
+        <li><a href="{% url 'contacts' %}" class="{% if title == 'контакты' %}active{% endif %}">контакты</a></li>
+        {% if user.is_authenticated %}
+        <li>
+            <a href="{% url 'auth:edit' %}">
+                {{ user.first_name|default:'Пользователь' }}
+            </a>
+        </li>
+        {% endif %}
+        <li>
+            {% if user.is_authenticated %}
+                <a href="{% url 'auth:logout' %}">выйти</a>
+            {% else %}
+                <a href="{% url 'auth:login' %}">войти</a>
+            {% endif %}
+        </li>
+    </ul>
+    <a href="#" class="search"></a>
+    <a href="{% url 'basket:view' %}" class="basket">
+        <span>
+            {% if basket %} {{ basket|length }} {% endif %}
+        </span>
+    </a>
+    <a href="{% url 'basket:view' %}" class="basket__total">
+        <span>
+            {% if basket %} Сумма: {{ total }} {% endif %}
+        </span>
+    </a>
+
+
+</div>
