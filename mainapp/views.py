@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 # from json import loads
+from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
 
 
@@ -15,8 +16,15 @@ def products(request, pk=None):
     # for element in ProductCategory.objects.all():
     #     menu_links.append({'href': element.href, 'name': element.name})
 
+    basket = []
+    total = 0
     menu_links = ProductCategory.objects.all()
     related_products = Product.objects.all()[:3]
+
+    if request.user.is_authenticated:
+        basket = Basket.objects.filter(user=request.user)
+        for element in basket:
+            total += element.quantity * element.product.price
 
     if pk is not None:
         if pk == 0:
@@ -31,6 +39,8 @@ def products(request, pk=None):
             'related_products': related_products,
             'category': category,
             'products': products,
+            'basket': basket,
+            'total': total,
         }
         return render(request, 'mainapp/products.html', context)
 
@@ -42,5 +52,7 @@ def products(request, pk=None):
         'menu_links': menu_links,
         'related_products': related_products,
         'products': products,
+        'basket': basket,
+        'total': total,
     }
     return render(request, 'mainapp/products.html', context)

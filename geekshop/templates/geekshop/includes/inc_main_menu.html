@@ -20,5 +20,16 @@
         </li>
     </ul>
     <a href="#" class="search"></a>
-    <a href="#" class="basket"></a>
+    <a href="{% url 'basket:view' %}" class="basket">
+        <span>
+            {% if basket %} {{ basket|length }} {% endif %}
+        </span>
+    </a>
+    <a href="{% url 'basket:view' %}" class="basket__total">
+        <span>
+            {% if basket %} Сумма: {{ total }} {% endif %}
+        </span>
+    </a>
+
+
 </div>
