@@ -1,10 +1,25 @@
 from django.shortcuts import render
+from basketapp.models import Basket
+from mainapp.views import get_basket
 
-# Create your views here.
 
 def index(request):
-    return render(request, 'geekshop/index.html')
+    title = 'главная'
+    basket = get_basket(request.user)
+    total = 0
+    context = {
+        'title': title,
+        'basket': basket,
+    }
+    return render(request, 'geekshop/index.html', context)
 
 
 def contacts(request):
-    return render(request, 'geekshop/contact.html')
+    title = 'контакты'
+    basket = get_basket(request.user)
+    total = 0
+    context = {
+        'title': title,
+        'basket': basket,
+    }
+    return render(request, 'geekshop/contact.html', context)
