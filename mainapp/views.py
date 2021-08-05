@@ -1,30 +1,33 @@
+import random
+
 from django.shortcuts import render, get_object_or_404
 # from json import loads
 from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
 
 
+def get_basket(user):
+    if user.is_authenticated:
+        return Basket.objects.filter(user=user)
+    return []
+
+
+def get_hot_product():
+    hot_query = Product.objects.all()
+    return random.sample(list(hot_query), 1)[0]
+
+
+def get_related_products(product):
+    related_products = Product.objects.filter(category=product.category).exclude(pk=product.pk)[:3]
+    return related_products
+
+
 def products(request, pk=None):
     title = 'продукты'
-
-    # with open('mainapp/menu_links.json', 'r', encoding='utf-8') as source:
-    #     menu_links = loads(source.read())
-
-    # menu_links = [
-    #     {'href': 'index', 'name': 'все'},
-    # ]
-    # for element in ProductCategory.objects.all():
-    #     menu_links.append({'href': element.href, 'name': element.name})
-
-    basket = []
-    total = 0
     menu_links = ProductCategory.objects.all()
-    related_products = Product.objects.all()[:3]
-
-    if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
-        for element in basket:
-            total += element.quantity * element.product.price
+    basket = get_basket(request.user)
+    hot_product = get_hot_product()
+    related_products = get_related_products(hot_product)
 
     if pk is not None:
         if pk == 0:
@@ -40,11 +43,10 @@ def products(request, pk=None):
             'category': category,
             'products': products,
             'basket': basket,
-            'total': total,
+            'hot_product': hot_product,
         }
         return render(request, 'mainapp/products.html', context)
 
-    related_products = Product.objects.all()[:3]
     products = Product.objects.all().order_by('price')
 
     context = {
@@ -53,6 +55,22 @@ def products(request, pk=None):
         'related_products': related_products,
         'products': products,
         'basket': basket,
-        'total': total,
+        'hot_product': hot_product,
     }
     return render(request, 'mainapp/products.html', context)
+
+
+def product(request, pk):
+    title = 'продукты'
+    menu_links = ProductCategory.objects.all()
+    basket = get_basket(request.user)
+    product = get_object_or_404(Product, pk=pk)
+    related_products = get_related_products(product)
+    context = {
+        'title': title,
+        'menu_links': menu_links,
+        'related_products': related_products,
+        'basket': basket,
+        'product': product,
+    }
+    return render(request, 'mainapp/product.html', context)

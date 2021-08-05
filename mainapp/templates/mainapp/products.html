@@ -11,21 +11,21 @@
         <div class="details-products">
             <div class="details-slider">
                 <div class="slider-product">
-                    <img src="{% static 'geekshop/img/slider1.jpg' %}">
+                    <img src="/media/{{ hot_product.image }}">
                 </div>
                 <div class="slider-control">
                     <div class="block">
-                        <a href="#"><img src="{% static 'geekshop/img/controll.jpg' %}" alt="">
+                        <a href="#"><img src="/media/{{ hot_product.image }}" style="width:70px;" alt="">
                             <div class="text"></div>
                         </a>
                     </div>
                     <div class="block">
-                        <a href="#"><img src="{% static 'geekshop/img/controll1.jpg' %}" alt="">
+                        <a href="#"><img src="/media/{{ hot_product.image }}" style="width:70px;" alt="">
                             <div class="text"></div>
                         </a>
                     </div>
                     <div class="block">
-                        <a href="#"><img src="{% static 'geekshop/img/controll2.jpg' %}" alt="">
+                        <a href="#"><img src="/media/{{ hot_product.image }}" style="width:70px;" alt="">
                             <div class="text"></div>
                         </a>
                     </div>
@@ -33,19 +33,14 @@
             </div>
 
             <div class="description">
-                <h3 class="big-bold">Отличный стул</h3>
+                <h3 class="big-bold">{{ hot_product.name }}</h3>
                 <h3 class="red">горячее предложение</h3>
-                <p class="price"> 2585.9 <span>руб</span></p>
-                <a href="#" class="red-button">
+                <p class="price"> {{ hot_product.price }} <span>руб</span></p>
+                <a href="{% url 'basket:add' hot_product.pk %}" class="red-button">
                     заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
                 </a>
                 <div class="description-text">
-                    <p>Расположитесь комфортно.</p>
-                    <p>Отличное качество материалов
-                        позволит вам это.</p>
-                    <p>Различные цвета</p>
-                    <p>высочайший уровень
-                        эргономики и прочность.</p>
+                    <p>{{ hot_product.description }}</p>
                 </div>
             </div>
         </div>
@@ -60,14 +55,14 @@
             {% endif %}
             <div class="related-products clearfix">
 
-                {% for product in products %}
+                {% for item in products %}
                 <div class="block">
-                    <a href="{% url 'basketapp:add' product.pk %}">
-                        <img src="/media/{{ product.image }}" alt="product">
+                    <a href="{% url 'products:product' item.pk %}">
+                        <img src="/media/{{ item.image }}" alt="product">
                         <div class="text">
                             <img src="{% static 'geekshop/img/icon-hover.png' %}" alt="hover">
-                            <h4>{{ product.name }}</h4>
-                            <p>{{ product.description }}</p>
+                            <h4>{{ item.name }}</h4>
+                            <p>{{ item.shor_desc }}</p>
                         </div>
                     </a>
                 </div>
@@ -83,36 +78,17 @@
                 <a class="explore" href="#">показать все <img src="{% static 'geekshop/img/arrow.png' %}" alt=""></a>
             </div>
             <div class="related-products clearfix">
-                {% for product in related_products %}
+                {% for item in related_products %}
                 <div class="block">
-                    <a href="#"><img src="/media/{{ product.image }}" alt="">
+                    <a href="#"><img src="/media/{{ item.image }}" alt="">
                         <div class="text">
                             <img src="{% static 'geekshop/img/icon-hover.png' %}" alt="img">
-                            <h4>{{ product.name }}</h4>
-                            <p>{{ product.short_desc }}</p>
+                            <h4>{{ item.name }}</h4>
+                            <p>{{ item.short_desc }}</p>
                         </div>
                     </a>
                 </div>
                 {% endfor %}
-                <!--					<div class="block">-->
-                <!--						<a href="#"><img src="{% static 'geekshop/img/product-21.jpg' %}" alt="">-->
-                <!--							<div class="text">-->
-                <!--								<img src="{% static 'geekshop/img/icon-hover.png' %}" alt="img">-->
-                <!--								<h4>Стул повышенного качества</h4>-->
-                <!--								<p>Не оторваться. </p>-->
-                <!--							</div>-->
-                <!--						</a>-->
-                <!--					</div>-->
-                <!--					<div class="block">-->
-                <!--						<a href="#"><img src="{% static 'geekshop/img/product-31.jpg' %}" alt="">-->
-                <!--							<div class="text">-->
-                <!--								<img src="{% static 'geekshop/img/icon-hover.png' %}" alt="img">-->
-                <!--								<h4>Стул повышенного качества</h4>-->
-                <!--								<p>Не оторваться. </p>-->
-                <!--							</div>-->
-                <!--						</a>-->
-                <!--					</div>-->
-
             </div>
         </div>
     </div>
