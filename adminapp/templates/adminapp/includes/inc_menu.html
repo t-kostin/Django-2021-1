@@ -1,4 +1,4 @@
-<a href="#" class="nav_link active">
+<a href="#" class="nav_link">
     <i class='bx bx-grid-alt nav_icon'></i>
     <span class="nav_name">Dashboard</span>
 </a>
@@ -11,7 +11,7 @@
     <span class="nav_name">Пользователи</span>
 </a>
 
-<a href="{#% url 'admin_staff:categories' %#}"
+<a href="{% url 'admin_staff:categories' %}"
    class="{% if request.resolver_match.url_name == 'categories' %}
     active
     {% endif %} nav_link">

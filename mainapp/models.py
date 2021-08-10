@@ -16,6 +16,9 @@ class ProductCategory(models.Model):
         max_length=64,
         unique=True,
     )
+    is_active = models.BooleanField(
+        default=True,
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
     )

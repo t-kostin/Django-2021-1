@@ -32,6 +32,7 @@ class ShopUserRegisterForm(UserCreationForm):
             raise forms.ValidationError('Вы слишком молоды')
         return age
 
+
 class ShopUserEditForm(UserChangeForm):
     class Meta:
         model = ShopUser
