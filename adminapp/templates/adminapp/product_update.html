@@ -11,15 +11,15 @@
                 Редактирование/Создание
             </div>
             <div class="card-body">
-                <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                <form  method="post">
                     {% csrf_token %}
-                    {{ product_form.as_p }}
+                    {{ form.as_p }}
                     <input class="form-control btn-success" type="submit" value="сохранить">
                 </form>
             </div>
         </div>
         <button class="btn btn-info">
-            <a href="{% url 'admin_staff:products' category_pk %}">
+            <a href="{% url 'admin_staff:products' category.pk %}">
                 к списку  товаров
             </a>
         </button>

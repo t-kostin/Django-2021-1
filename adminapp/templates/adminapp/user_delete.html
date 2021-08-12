@@ -9,15 +9,15 @@
             <div class="card-header">
             </div>
             <div class="card-body">
-                Уверены, что хотите удалить {{ user_to_delete.username }}
-                {% if user_to_delete.first_name %}
-                ({{ user_to_delete.first_name|title }}</b>
-                {% if user_to_delete.last_name %}
-                {{ user_to_delete.last_name|title }}
+                Уверены, что хотите удалить {{ object.username }}
+                {% if object.first_name %}
+                ({{ object.first_name|title }}</b>
+                {% if object.last_name %}
+                {{ object.last_name|title }}
                 {% endif %})
                 {% endif %}
                 ?
-                <form action="{% url 'admin_staff:user_delete' user_to_delete.pk %}" method="post">
+                <form  method="POST">
                     {% csrf_token %}
                     <input class="btn btn-danger" type="submit" value="удалить">
                     <button class="btn btn-success">

@@ -12,10 +12,6 @@ class ProductCategory(models.Model):
         verbose_name='описание',
         blank=True,
     )
-    href = models.CharField(
-        max_length=64,
-        unique=True,
-    )
     is_active = models.BooleanField(
         default=True,
     )
@@ -32,6 +28,10 @@ class ProductCategory(models.Model):
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
+
+    def soft_delete(self):
+        self.is_active = False
+        self.save()
 
 
 class Product(models.Model):
@@ -76,6 +76,10 @@ class Product(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True,
     )
+
+    def soft_delete(self):
+        self.is_active = False
+        self.save()
 
     def __str__(self):
         return '%s - %s' % (self.name, self.pk)

@@ -10,7 +10,7 @@
             </div>
             <div class="card-body">
                 Уверены, что хотите удалить {{ product_to_del.name }}?
-                <form action="{% url 'admin_staff:product_delete' product_to_del.pk %}" method="post">
+                <form  method="post">
                     {% csrf_token %}
                     <input class="btn btn-danger" type="submit" value="удалить">
                     <button class="btn btn-success">
