@@ -395,12 +395,10 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 #     }
 #     return render(request, 'adminapp/product_delete.html', context)
 
-#todo return to products and category after delete
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'adminapp/product_delete.html'
     context_object_name = 'product_to_del'
-    success_url = reverse_lazy('admin_staff:categories') # не выходит вернуться обратно к продуктам
 
     def get_context_data(self, **kwargs):
         context = super(ProductDeleteView, self).get_context_data(**kwargs)
@@ -413,7 +411,7 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         self.object.soft_delete()
         return HttpResponseRedirect(self.get_success_url())
 
-    # def get_success_url(self):
-    #     pk = self.kwargs['pk']
-    #     product_to_del = get_object_or_404(Product, pk=pk)
-    #     return reverse_lazy('admin_staff:products', {'pk': pk})
+    def get_success_url(self):
+        product_pk = self.kwargs['pk']
+        category_pk = get_object_or_404(Product, pk=product_pk).category.pk
+        return reverse_lazy('admin_staff:products', kwargs={'pk': category_pk})
