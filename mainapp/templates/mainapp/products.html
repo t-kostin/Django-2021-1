@@ -49,12 +49,11 @@
             {% if category %}
             <div class="title clearfix">
                 <h2>
-                    Категория: "{{ category.name|title }}"
+                    Категория: {{ category.name|title }}
                 </h2>
             </div>
             {% endif %}
             <div class="related-products clearfix">
-
                 {% for item in products %}
                 <div class="block">
                     <a href="{% url 'products:product' item.pk %}">
@@ -62,12 +61,27 @@
                         <div class="text">
                             <img src="{% static 'geekshop/img/icon-hover.png' %}" alt="hover">
                             <h4>{{ item.name }}</h4>
-                            <p>{{ item.shor_desc }}</p>
+                            <p>{{ item.short_desc }}</p>
                         </div>
                     </a>
                 </div>
                 {% endfor %}
-
+            </div>
+            <div class="paginator">
+                {% if products.has_previous %}
+                    <a href="{% url 'products:page' category.pk products.previous_page_number %}">
+                        <
+                    </a>
+                {% endif %}
+            <span class="current">
+                страница {{ products.number }} из
+                {{ products.paginator.num_pages }}
+            </span>
+                {% if products.has_next %}
+                    <a href="{% url 'products:page' category.pk products.next_page_number %}">
+                        >
+                    </a>
+                {% endif %}
             </div>
         </div>
 

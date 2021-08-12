@@ -1,0 +1,26 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    <div class="container-fluid">
+        <h1 class="mt-4">{{ title|title }}</h1>
+        <div class="card mb-4">
+            <div class="card-header">
+            </div>
+            <div class="card-body">
+                Уверены, что хотите удалить {{ product_to_del.name }}?
+                <form action="{% url 'admin_staff:product_delete' product_to_del.pk %}" method="post">
+                    {% csrf_token %}
+                    <input class="btn btn-danger" type="submit" value="удалить">
+                    <button class="btn btn-success">
+                        <a href="{% url 'admin_staff:products' product_to_del.category.pk %}">
+                            Отмена
+                        </a>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

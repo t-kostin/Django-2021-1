@@ -35,7 +35,7 @@
                         </tfoot>
                         <tbody>
                         {% for user in user_list %}
-                            <tr bgcolor="{% if not user.is_active %}lightgrey{% endif %}">
+                            <tr style="{% if not user.is_active %}opacity: .3;{% endif %}">
                                 <td>
                                     {% if user.is_active %}
                                         <a href="{% url 'admin_staff:user_update' user.id %}" style="color: dodgerblue">

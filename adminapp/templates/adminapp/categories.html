@@ -33,7 +33,7 @@
                         </tfoot>
                         <tbody>
                         {% for category in categories %}
-                            <tr bgcolor="{% if not category.is_active %}lightgrey{% endif %}">
+                            <tr style="{% if not category.is_active %}opacity: .3;{% endif %}">
                                 <td>{{ category.name|title }}</td>
                                 <td>{{ category.description }}</td>
                                 <td class="text-center">

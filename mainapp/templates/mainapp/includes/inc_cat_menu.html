@@ -13,7 +13,8 @@
                    class="{% if request.resolver_match.kwargs.pk|add:'0' == link.pk %}active
                           {% endif %}">
                    {{ link.name }}
-                </a></li>
+                </a>
+            </li>
         {% endfor %}
     </ul>
 </div>
