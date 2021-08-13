@@ -1,5 +1,6 @@
 {% extends 'adminapp/base.html' %}
 {% load static %}
+{% load newtags %}
 
 {% block content %}
 <main>
@@ -40,7 +41,7 @@
                         <tbody>
                         {% for product in products %}
                             <tr style="{% if not product.is_active %}opacity: .3;{% endif %}">
-                                <td><img src="/media/{{ product.image }}" width="120px"></td>
+                                <td><img src="{{ product.image|prod_img_path }}" width="120px"></td>
                                 <td>{{ product.name }}</td>
                                 <td>{{ product.short_desc }}</td>
                                 <td>{{ product.price }}</td>

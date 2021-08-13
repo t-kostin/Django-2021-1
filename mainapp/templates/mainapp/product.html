@@ -1,5 +1,6 @@
 {% extends 'geekshop/template.html' %}
 {% load static %}
+{% load newtags %}
 {% block content %}
 <div class="container">
     <div class="hero-white">
@@ -11,7 +12,7 @@
         <div class="details-products" style="height: auto;">
             <div class="details-slider">
                 <div class="slider-product">
-                    <img src="/media/{{ product.image }}">
+                    <img src="{{ product.image|prod_img_path }}">
                 </div>
             </div>
 
@@ -35,7 +36,7 @@
             <div class="related-products clearfix">
                 {% for item in related_products %}
                 <div class="block">
-                    <a href="{% url 'products:product' item.pk %}"><img src="/media/{{ item.image }}" alt="">
+                    <a href="{% url 'products:product' item.pk %}"><img src="{{ item.image|prod_img_path }}" alt="">
                         <div class="text">
                             <img src="{% static 'geekshop/img/icon-hover.png' %}" alt="img">
                             <h4>{{ item.name }}</h4>

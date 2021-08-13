@@ -1,5 +1,6 @@
 {% extends 'adminapp/base.html' %}
 {% load static %}
+{% load newtags %}
 
 {% block content %}
 <main>
@@ -8,7 +9,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div class="details-slider">
-                    <img src="/media/{{ product.image }}">
+                    <img src="{{ product.image|prod_img_path }}">
                 </div>
 
                 <h3 class="big-bold">{{ product.name }}</h3>

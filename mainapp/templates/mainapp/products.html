@@ -1,5 +1,6 @@
 {% extends 'geekshop/template.html' %}
 {% load static %}
+{% load newtags %}
 {% block content %}
 <div class="container">
     <div class="hero-white">
@@ -11,21 +12,21 @@
         <div class="details-products">
             <div class="details-slider">
                 <div class="slider-product">
-                    <img src="/media/{{ hot_product.image }}">
+                    <img src="{{ hot_product.image|prod_img_path }}">
                 </div>
                 <div class="slider-control">
                     <div class="block">
-                        <a href="#"><img src="/media/{{ hot_product.image }}" style="width:70px;" alt="">
+                        <a href="#"><img src="{{ hot_product.image|prod_img_path }}" style="width:70px;" alt="">
                             <div class="text"></div>
                         </a>
                     </div>
                     <div class="block">
-                        <a href="#"><img src="/media/{{ hot_product.image }}" style="width:70px;" alt="">
+                        <a href="#"><img src="{{ hot_product.image|prod_img_path }}" style="width:70px;" alt="">
                             <div class="text"></div>
                         </a>
                     </div>
                     <div class="block">
-                        <a href="#"><img src="/media/{{ hot_product.image }}" style="width:70px;" alt="">
+                        <a href="#"><img src="{{ hot_product.image|prod_img_path }}" style="width:70px;" alt="">
                             <div class="text"></div>
                         </a>
                     </div>
@@ -57,7 +58,7 @@
                 {% for item in products %}
                 <div class="block">
                     <a href="{% url 'products:product' item.pk %}">
-                        <img src="/media/{{ item.image }}" alt="product">
+                        <img src="{{ item.image|prod_img_path }}" alt="product">
                         <div class="text">
                             <img src="{% static 'geekshop/img/icon-hover.png' %}" alt="hover">
                             <h4>{{ item.name }}</h4>
@@ -94,7 +95,7 @@
             <div class="related-products clearfix">
                 {% for item in related_products %}
                 <div class="block">
-                    <a href="#"><img src="/media/{{ item.image }}" alt="">
+                    <a href="#"><img src="{{ item.image|prod_img_path }}" alt="">
                         <div class="text">
                             <img src="{% static 'geekshop/img/icon-hover.png' %}" alt="img">
                             <h4>{{ item.name }}</h4>
