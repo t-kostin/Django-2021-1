@@ -1,15 +1,15 @@
 import random
 from django.shortcuts import render, get_object_or_404
 # from json import loads
-from basketapp.models import Basket
+# 1 from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
-def get_basket(user):
-    if user.is_authenticated:
-        return Basket.objects.filter(user=user)
-    return []
+# 1 def get_basket(user):
+#     if user.is_authenticated:
+#         return Basket.objects.filter(user=user)
+#     return []
 
 
 def get_hot_product():
@@ -26,7 +26,7 @@ def get_related_products(product):
 def products(request, pk=None, page=1):
     title = 'продукты'
     menu_links = ProductCategory.objects.filter(is_active=True)
-    basket = get_basket(request.user)
+    # basket = get_basket(request.user)
     hot_product = get_hot_product()
     related_products = get_related_products(hot_product)
 
@@ -55,7 +55,7 @@ def products(request, pk=None, page=1):
             'related_products': related_products,
             'category': category,
             'products': products_paginator,
-            'basket': basket,
+            # 'basket': basket,
             'hot_product': hot_product,
         }
         return render(request, 'mainapp/products.html', context)
@@ -79,7 +79,7 @@ def products(request, pk=None, page=1):
         'related_products': related_products,
         'category': category,
         'products': products_paginator,
-        'basket': basket,
+        # 'basket': basket,
         'hot_product': hot_product,
     }
     return render(request, 'mainapp/products.html', context)
@@ -88,14 +88,14 @@ def products(request, pk=None, page=1):
 def product(request, pk):
     title = 'продукты'
     menu_links = ProductCategory.objects.filter(is_active=True)
-    basket = get_basket(request.user)
+    # basket = get_basket(request.user)
     product = get_object_or_404(Product, pk=pk)
     related_products = get_related_products(product)
     context = {
         'title': title,
         'menu_links': menu_links,
         'related_products': related_products,
-        'basket': basket,
+        # 'basket': basket,
         'product': product,
     }
     return render(request, 'mainapp/product.html', context)

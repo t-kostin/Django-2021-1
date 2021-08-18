@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'mainapp.context_processors.basket',
             ],
         },
     },
@@ -138,3 +139,21 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/auth/login/'
+
+DOMAIN_NAME = 'http://localhost:8000' # Или всё-таки 8080??
+
+# вариант с внешним smtp-сервером (в даннои случае mailtrap.io)
+# EMAIL_HOST = 'smtp.mailtrap.io'
+# EMAIL_HOST_USER = 'c12f0755afeaeb'
+# EMAIL_HOST_PASSWORD = 'c58c76d0510796'
+# EMAIL_PORT = '2525'
+# EMAIL_USE_SSL = False
+# EMAIL_USE_TLS = False
+
+# вариант python -m smtpd -n -c DebuggingServer localhost:25
+# EMAIL_HOST_PASSWORD = None
+# EMAIL_HOST_USER = None
+
+# вариант логирования сообщений почты в виде файлов вместо отправки
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = 'tmp/email-messages/'
