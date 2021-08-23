@@ -12,8 +12,20 @@
             <br>
             <input class="form-control btn-primary" type="submit" value="войти">
         </form>
-        <a href="{% url 'auth:register' %}">
-            зарегистрироваться
-        </a>
+        <button class="btn btn-round form-control">
+            <a href="{% url 'auth:register' %}">
+                зарегистрироваться
+            </a>
+        </button>
+        <button class="btn btn-round form-control">
+            <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/">
+                Вход через VK
+            </a>
+        </button>
+        <button class="btn btn-round form-control">
+            <a href="{% url 'social:begin' 'google-oauth2' %}?next=/">
+                Вход через Google
+            </a>
+        </button>
     </div>
 {% endblock %}
