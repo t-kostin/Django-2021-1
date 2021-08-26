@@ -3,12 +3,12 @@
 
 {% block content %}
     <div class="row col-3">
-        <form class="'form-horizontal" action="{% url 'auth:login' %}" method="post">
+        <form class="form-horizontal" action="{% url 'auth:login' %}" method="post">
             {% csrf_token %}
             {% if next %}
-                <input type="hidden" name="next" value="{{ next }}">
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
             {% endif %}
-            {{ login_form.as_p }}
+            {{ form.as_p }}
             <br>
             <input class="form-control btn-primary" type="submit" value="войти">
         </form>

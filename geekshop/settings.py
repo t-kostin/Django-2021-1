@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'authapp',
     'basketapp',
     'adminapp',
+    'ordersapp',
     'social_django',
 ]
 
@@ -59,6 +60,7 @@ AUTHENTICATION_BACKENDS  = (
 )
 
 LOGIN_ERROR_URL = '/'
+LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

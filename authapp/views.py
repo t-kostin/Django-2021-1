@@ -1,39 +1,60 @@
 from django.conf import settings
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, UpdateView, DetailView, FormView
+
 from authapp.forms import ShopUserLoginForm, ShopUserEditForm, ShopUserRegisterForm, ShopUserProfileEditForm
 from authapp.models import ShopUser
 
 
-def login(request):
-    title = 'вход'
-    login_form = ShopUserLoginForm(data=request.POST or None)
-    next = request.GET['next'] if 'next' in request.GET.keys() else ''
-    if request.method == 'POST' and login_form.is_valid():
-        username = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(username=username, password=password)
-        if user and user.is_active:
-            auth.login(request, user)
-            if 'next' in request.POST.keys():
-                return HttpResponseRedirect(request.POST['next'])
-            else:
-                return HttpResponseRedirect(reverse('index'))
+class UserLoginView(LoginView):
+    model = ShopUser
+    template_name = 'authapp/login.html'
+    success_url = reverse_lazy('index')
+    form_class = ShopUserLoginForm
 
-    context = {
-        'title': title,
-        'login_form': login_form,
-        'next': next,
-    }
-    return render(request, 'authapp/login.html', context)
+    def get_context_data(self, **kwargs):
+        context = super(UserLoginView, self).get_context_data(**kwargs)
+        title = 'Вход'
+        context.update({'title': title})
+        return context
 
 
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('index'))
+# def login(request):
+#     title = 'вход'
+#     login_form = ShopUserLoginForm(data=request.POST or None)
+#     next = request.GET['next'] if 'next' in request.GET.keys() else ''
+#     if request.method == 'POST' and login_form.is_valid():
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = auth.authenticate(username=username, password=password)
+#         if user and user.is_active:
+#             auth.login(request, user)
+#             if 'next' in request.POST.keys():
+#                 return HttpResponseRedirect(request.POST['next'])
+#             else:
+#                 return HttpResponseRedirect(reverse('index'))
+#
+#     context = {
+#         'title': title,
+#         'form': login_form,
+#         'next': next,
+#     }
+#     return render(request, 'authapp/login.html', context)
+
+
+class UserLogoutView(LogoutView):
+    template_name = 'authapp/logout.html'
+
+
+# def logout(request):
+#     auth.logout(request)
+#     return HttpResponseRedirect(reverse('index'))
 
 
 def register(request):
@@ -43,10 +64,10 @@ def register(request):
         register_form = ShopUserRegisterForm(request.POST, request.FILES)
         if register_form.is_valid():
             user = register_form.save()
-            # if send_verify_mail(user):
-            #     print('Mail sent successfully')
-            # else:
-            #     print('Mail not sent')
+            if send_verify_mail(user):
+                print('Mail sent successfully')
+            else:
+                print('Mail not sent')
             return HttpResponseRedirect(reverse('auth:login'))
     else:
         register_form = ShopUserRegisterForm()
@@ -58,6 +79,7 @@ def register(request):
     return render(request, 'authapp/register.html', context)
 
 
+@login_required
 def edit(request):
     title = 'профиль'
     if request.method == 'POST':
