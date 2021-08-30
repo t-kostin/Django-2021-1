@@ -68,7 +68,7 @@ class OrderUpdate(LoginRequiredMixin, UpdateView):
         data = super(OrderUpdate, self).get_context_data(**kwargs)
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
         if self.request.POST:
-            data['orderitems'] = OrderFormSet(self.request.POST)
+            data['orderitems'] = OrderFormSet(self.request.POST, instance=self.object)
             # formset = OrderFormSet(self.request.POST, instance=self.object)
         else:
             formset = OrderFormSet(instance=self.object)
@@ -116,14 +116,11 @@ def order_forming_complete(request, pk):
 @receiver(pre_save, sender=OrderItem)
 @receiver(pre_save, sender=Basket)
 def product_quantity_update_save(sender, update_fields, instance, **kwargs):
-    # print(f'{update_fields=}')
     if update_fields == 'quantity' or 'product': # зачем это???
         if instance.pk:
             instance.product.quantity -= instance.quantity - sender.get_item(instance.pk).quantity
         else:
             instance.product.quantity -= instance.quantity
-        # print(f'{instance.quantity=}')
-        # print(f'{instance.product.quantity=}')
         instance.product.save()
 
 
@@ -132,6 +129,7 @@ def product_quantity_update_save(sender, update_fields, instance, **kwargs):
 def product_quantity_update_save(sender, instance, **kwargs):
     instance.product.quantity -= instance.quantity
     instance.product.save()
+
 
 def get_product_price(request, pk):
     if request.is_ajax():
