@@ -148,7 +148,9 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = ( 
     os.path.join(BASE_DIR, 'geekshop', 'static'),
 )
 
@@ -166,7 +168,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/auth/login/'
 
-DOMAIN_NAME = 'http://localhost:8000' # Или всё-таки 8080??
+DOMAIN_NAME = 'http://151.248.113.248'
 
 # вариант с внешним smtp-сервером (в даннои случае mailtrap.io)
 # EMAIL_HOST = 'smtp.mailtrap.io'
