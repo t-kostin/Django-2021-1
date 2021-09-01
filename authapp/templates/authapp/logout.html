@@ -1,0 +1,13 @@
+{% extends 'authapp/template.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="text-center">
+        <p>Вы успешно вышли из системы</p>
+        <button class="btn-success">
+            <a href="{% url 'index' %}" style="text-decoration: none; color: white;">
+                на главную
+            </a>
+        </button>
+    </div>
+{% endblock %}
