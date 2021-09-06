@@ -2,11 +2,11 @@ from locust import HttpUser, TaskSet, task
 
 
 def login(l):
-    l.client.post('auth/login', {'username':'admin', 'password':'cirijifi'})
+    l.client.post('/auth/login', {'username':'admin', 'password':'cirijifi'})
 
 
 def logout(l):
-    l.client.post('auth/logout', {'username':'admin', 'password':'cirijifi'})
+    l.client.post('/auth/logout', {'username':'admin', 'password':'cirijifi'})
 
 
 def index(l):
