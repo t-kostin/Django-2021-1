@@ -38,6 +38,7 @@ class Order(models.Model):
     )
     is_active = models.BooleanField(
         verbose_name='Активен',
+        db_index=True,
         default=True,
     )
 

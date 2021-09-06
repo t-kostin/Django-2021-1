@@ -13,6 +13,7 @@ class ProductCategory(models.Model):
         blank=True,
     )
     is_active = models.BooleanField(
+        db_index=True,
         default=True,
     )
     created_at = models.DateTimeField(
@@ -68,6 +69,7 @@ class Product(models.Model):
         default=0,
     )
     is_active = models.BooleanField(
+        db_index=True,
         default=True,
     )
     created_at = models.DateTimeField(
