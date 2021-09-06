@@ -13,12 +13,17 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def get_hot_product():
-    hot_query = Product.objects.filter(is_active=True, category__is_active=True)
+    hot_query = Product.objects.filter(
+        is_active=True,
+        category__is_active=True
+    )
     return random.sample(list(hot_query), 1)[0]
 
 
 def get_related_products(product):
-    related_products = Product.objects.filter(is_active=True, category__is_active=True, category=product.category)\
+    related_products = Product.objects\
+            .filter(is_active=True, category__is_active=True)\
+            .select_related('category')\
             .exclude(pk=product.pk)[:3]
     return related_products
 
@@ -32,14 +37,21 @@ def products(request, pk=None, page=1):
 
     if pk is not None:
         if pk == 0:
-            products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
+            products = Product.objects.filter(
+                is_active=True,
+                category__is_active=True
+            ).order_by('price')
             category = {
                 'name': 'все',
                 'pk': 0
             }
         else:
             category = get_object_or_404(ProductCategory, pk=pk)
-            products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by('price')
+            products = Product.objects.filter(
+                category__pk=pk,
+                is_active=True,
+                category__is_active=True
+            ).order_by('price')
 
         paginator = Paginator(products, 2)
         try:

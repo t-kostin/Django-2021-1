@@ -25,6 +25,7 @@ class Basket(models.Model):
     )
     quantity = models.PositiveIntegerField(
         verbose_name='количество',
+
         default=0,
     )
     add_datetime = models.DateTimeField(
@@ -42,7 +43,8 @@ class Basket(models.Model):
 
     @property
     def total_quantity(self):
-        items = Basket.objects.filter(user=self.user)
+        #items = Basket.objects.filter(user=self.user)
+        items = Basket.objects.select_related('user')
         total_quantity = sum(list(map(lambda x: x.quantity, items)))
         return total_quantity
 
