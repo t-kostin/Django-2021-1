@@ -19,7 +19,7 @@ def products(l):
 
 
 @task
-class UserBegavior(TaskSet):
+class UserBehavior(TaskSet):
     tasks = {index: 2, products: 5}
 
     def on_start(self):
