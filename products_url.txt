@@ -1,0 +1,7 @@
+http://151.248.113.248/products/
+http://151.248.113.248/products/category/0
+http://151.248.113.248/products/category/1
+http://151.248.113.248/products/category/2
+http://151.248.113.248/products/category/3
+http://151.248.113.248/products/category/4
+http://151.248.113.248/products/product/9

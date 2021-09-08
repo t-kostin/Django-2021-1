@@ -6,7 +6,7 @@ from django.shortcuts import render
 def index(request):
     title = 'главная'
     # basket = get_basket(request.user)
-    total = 0
+    # total = 0
     context = {
         'title': title,
         # 'basket': basket,
@@ -17,7 +17,7 @@ def index(request):
 def contacts(request):
     title = 'контакты'
     # basket = get_basket(request.user)
-    total = 0
+    # total = 0
     context = {
         'title': title,
         # 'basket': basket,
