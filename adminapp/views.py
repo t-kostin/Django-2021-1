@@ -1,13 +1,26 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-
 from adminapp.forms import ProductCategoryEditForm, ProductEditForm
 from authapp.forms import ShopUserRegisterForm
 from authapp.models import ShopUser
 from mainapp.models import ProductCategory, Product
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, DetailView,\
+    UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.dispatch import receiver
+from django.db import connection
+from django.db.models.signals import pre_save
+from django.db.models import F, Q
+import os
+
+
+def db_profile_by_type(prefix, type, queries):
+    LOG_PATH = 'tmp/logs'
+    update_queries = list(filter(lambda x: type in x['sql'], queries))
+    with open(os.path.join(LOG_PATH, 'log.txt'), 'a', encoding='utf-8') as log:
+        log.write(f'db_profile {type} for {prefix}:\n')
+        [log.write(query['sql'] + '\n') for query in update_queries]
 
 
 class UserListView(LoginRequiredMixin, ListView):
@@ -15,9 +28,6 @@ class UserListView(LoginRequiredMixin, ListView):
     template_name = 'adminapp/users.html'
     context_object_name = 'user_list'
     ordering = ['-is_active', '-is_superuser', '-is_staff', 'username']
-
-    # def get_queryset(self): # Альтернатива ordering
-    #     return ShopUser.objects.all().order_by('-is_active', '-is_superuser', '-is_staff', 'username')
 
     def get_context_data(self, **kwargs):
         context = super(UserListView, self).get_context_data(**kwargs)
@@ -42,7 +52,6 @@ class UserCreateView(LoginRequiredMixin, CreateView):
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = ShopUser
     template_name = 'adminapp/user_update.html'
-    # fields = ['first_name'] # Для частичного редактирования полей - перечень названий полей
     form_class = ShopUserRegisterForm
     success_url = reverse_lazy('admin_staff:users')
 
@@ -108,6 +117,19 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
         context.update({'title': title})
         return context
 
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                self.object.product_set\
+                        .update(price=F('price') * (1 - discount / 100))
+                db_profile_by_type(
+                    self.__class__,
+                    'UPDATE',
+                    connection.queries
+                )
+        return super().form_valid(form)
+
 
 class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     model = ProductCategory
@@ -132,7 +154,8 @@ class ProductListView(LoginRequiredMixin, ListView):
     context_object_name = 'products'
 
     def get_queryset(self, **kwargs):
-        return Product.objects.filter(category__id=self.kwargs['pk']).order_by('name')
+        return Product.objects.filter(category__id=self.kwargs['pk'])\
+            .order_by('name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -201,3 +224,13 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         product_pk = self.kwargs['pk']
         category_pk = get_object_or_404(Product, pk=product_pk).category.pk
         return reverse_lazy('admin_staff:products', kwargs={'pk': category_pk})
+
+
+@receiver(pre_save, sender=ProductCategory)
+def product_is_active_update_productcategory_save(sender, instance, **kwargs):
+    if instance.pk:
+        if instance.is_active:
+            instance.product_set.update(is_active=True)
+        else:
+            instance.product_set.update(is_active=False)
+        db_profile_by_type(sender, 'UPDATE', connection.queries)
