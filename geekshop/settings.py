@@ -205,7 +205,7 @@ if os.name == 'posix':
         }
     }
 
-LOW_CACHE = False
+LOW_CACHE = True
 
 # вариант с внешним smtp-сервером (в даннои случае mailtrap.io)
 # EMAIL_HOST = 'smtp.mailtrap.io'

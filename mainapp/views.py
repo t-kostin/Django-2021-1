@@ -1,11 +1,13 @@
 import random
 from django.shortcuts import render, get_object_or_404
 # from json import loads
-# 1 from basketapp.models import Basket
+# from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
 from django.core.cache import cache
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 
 # def get_basket(user):  # basket now from context processor
@@ -191,6 +193,44 @@ def products(request, pk=None, page=1):
         'hot_product': hot_product,
     }
     return render(request, 'mainapp/products.html', context)
+
+
+def products_ajax(request, pk=None, page=1):
+    if request.is_ajax():
+        menu_links = get_links_menu()
+        hot_product = get_hot_product()
+        related_products = get_related_products(hot_product)
+        if pk is None or pk == 0:
+            products = get_products_ordered_by_price()
+            category = {
+                'name': 'все',
+                'pk': 0
+            }
+        else:
+            category = get_category(pk)
+            products = get_products_in_category_ordered_by_price(pk)
+
+        paginator = Paginator(products, 2)
+        try:
+            products_paginator = paginator.page(page)
+        except PageNotAnInteger:
+            products_paginator = paginator.page(1)
+        except EmptyPage:
+            products_paginator = paginator.page(paginator.num_pages)
+
+        context = {
+            'menu_links': menu_links,
+            'category': category,
+            'products': products_paginator,
+            'related_products': related_products,
+            'hot_product': hot_product,
+        }
+        result = render_to_string(
+            'mainapp/includes/inc_products_list_content.html',
+            context=context,
+            request=request
+        )
+        return JsonResponse({'result': result})
 
 
 def product(request, pk):
