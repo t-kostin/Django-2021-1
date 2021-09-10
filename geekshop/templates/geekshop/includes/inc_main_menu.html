@@ -1,0 +1,53 @@
+<div class="header clearfix">
+    <a href="/" class="logo"></a>
+    <ul class="menu">
+        <li><a href="{% url 'index' %}" class="{% if title == 'главная' %}active{% endif %}">домой</a></li>
+        <li><a href="{% url 'products:index' %}" class="{% if title == 'продукты' %}active{% endif %}">продукты</a></li>
+        <li><a href="{% url 'contacts' %}" class="{% if title == 'контакты' %}active{% endif %}">контакты</a></li>
+        {% if user.is_authenticated %}
+        <li>
+            <div class="dropdown">
+                <a class="dropbtn" href="#">
+                    {{ user.first_name|default:'Пользователь' }}
+                </a>
+                <div class="dropdown-content">
+                    <a a href="{% url 'auth:edit' %}">
+                        профиль
+                    </a>
+                    {% if user.is_superuser %}
+                    <a href="/admin/">
+                        admin
+                    </a>
+                    {% endif %}
+                    {% if user.is_staff %}
+                    <a href="{% url 'admin_staff:users' %}">
+                        dashboard
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'auth:logout' %}">
+                        выйти
+                    </a>
+                </div>
+            </div>
+        </li>
+        {% else %}
+        <li>
+            <a href="{% url 'auth:login' %}">
+                войти
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+    <a href="#" class="search"></a>
+    {% if basket %}
+        <a href="{% url 'basket:view' %}" class="basket">
+            <span style="font-weight: 600;">
+                {{ basket.0.total_quantity }}
+            </span>
+        </a>
+    {% else %}
+        <div class="basket">
+        </div>
+    {% endif %}
+
+</div>
