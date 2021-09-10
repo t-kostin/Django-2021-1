@@ -106,6 +106,8 @@ def get_hot_product():
     #     category__is_active=True
     # )  # code without caching func
     hot_query = get_products()  # with caching
+    # if len(list(hot_query)) <= 0:
+    #     return []
     return random.sample(list(hot_query), 1)[0]
 
 
